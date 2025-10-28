@@ -1,11 +1,79 @@
-/* 
+body {
+    background-color: rgb(237, 237, 237);
+    font-family: 'Inter', sans-serif;
+    
+}
 
-    You can write your own styles here...
-    
-    
-    ...Or you can use the import command to include 
-    other sylesheets into your bunde as well, e.j:
-    
-    import 'relative/path/to/stylesheet.scss';
+.big-title {
+  display: flex;
+  justify-content: center;
+  color: #cb8888;
+  opacity: 0.3;
+  font-size: 100px;
+  font-weight: 80;
+  margin-bottom: 1px;
+}
 
-*/
+.paper {
+  background: #fff;
+  box-shadow:
+    
+    0 1px 1px rgba(0,0,0,0.15),
+    
+    0 10px 0 -5px #eee,
+    
+    0 10px 1px -4px rgba(0,0,0,0.15),
+    
+    0 20px 0 -10px #eee,
+    
+    0 20px 1px -9px rgba(0,0,0,0.15),  
+    
+    
+    0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+padding: 30px;
+margin: 30px auto;
+margin-top: 15px;
+width: 60%;
+display: block;
+
+
+ 
+}
+
+.ingreso-de-texto {
+  width: 62%;
+  border-color: none;
+  border: none;
+  outline: none;
+  opacity: 0.6;
+  font-size: 30px;
+  font-weight: 200;
+}
+
+.counter {
+    margin-left: -750px;
+    opacity: 0.3;
+}
+
+
+.texto-ingresado li {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  padding: 5px 10px;
+  border-bottom: 1px solid #eee;
+  margin-left: 160px;
+  margin-right: 20px;
+  opacity: 0.6;
+  font-size: 30px;
+  font-weight: 200;
+}
+
+.texto-ingresado li span {
+  opacity: 0.2;
+  font-size: 0.6em;
+  cursor: pointer;
+
+}
+
