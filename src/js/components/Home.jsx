@@ -1,57 +1,97 @@
-import React, { useState, Useeffect } from "react";
-import { renderToStaticMarkup } from "react-dom/server";
+import React, { useState, useEffect } from "react";
 
-
-
-//create your first component
 const Home = () => {
-	let [lista, setLista] = useState([])
-	let [tarea, setTarea] = useState("")
+  const [lista, setLista] = useState([]);
+  const [tarea, setTarea] = useState("");
 
-	const API_URL = 'https://playground.4geeks.com/todo/'
-	
-	const crearUsuario = () => {
-		fetch (API_URL + "users/carlossan", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},			
-		})
-			.then(response => response.json())
-			.then ((data) => console.log(data))
-			.catch (error => { console.log('Hubo un problema al crear el usuario: \n', error) })
-	}
-	
-	const crearTarea = async (text) => {
-		try {
-			const response = await fetch(API_URL) + "todos"
-		}
-	}
-	const agregar = (event) => {
-		if (event.key === "Enter") {
-			setLista([...lista, tarea])
-			setTarea("")
-		}
+  const API_URL = "https://playground.4geeks.com/todo/";
 
-	}
-	const eliminarTarea = (posicion) => {
-		setLista(lista.filter((item, index) => index !== posicion))
-	}
+  // const crearUsuario = () => {
+  //   fetch(API_URL + "users/carlossan", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => console.log(data))
+  //     .catch((err) =>
+  //       console.log("Hubo un problema al crear el usuario:\n", err)
+  //     );
+  // };
 
-	return (
-		<>
-			<h1 className="big-title">todos</h1>
-			<div className="text-center paper ">
-				<input className="ingreso-de-texto" type="text" placeholder="What needs to be done?" onChange={escribirTarea} value={tarea} onKeyDown={agregar} />
-				<ul className="list-unstyled texto-ingresado">
-					{lista.map((item, index) => (<li key={index}>{item}<span onClick={() => eliminarTarea(index)}> ❌</span></li>))}
+  const traerLista = () => {
+    fetch(API_URL + "users/carlossan")
+      .then((response) => {
+        if (response.status === 404) crearUsuario();
+        return response.json();
+      })
+      .then((data) => setLista(data.todos || []))
+      .catch((err) =>
+        console.log("Hubo un problema al obtener la lista:\n", err)
+      );
+  };
 
-				</ul>
-				<p className="counter">{lista.length} items left</p>
-			</div>
-		</>
+  const crearTarea = async (text) => {
+    try {
+      const response = await fetch(API_URL + "todos/carlossan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ label: text, is_done: false }),
+      });
+      if (!response.ok)
+        throw new Error(`Error ${response.status}: No se pudo crear la tarea`);
+      await traerLista();
+    } catch (error) {
+      console.error("Hubo un problema al crear la tarea:", error);
+    }
+  };
 
-	);
+  const eliminarTarea = async (id) => {
+    try {
+      const response = await fetch(API_URL + "todos/" + id, {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error("No se pudo eliminar la tarea");
+      await traerLista();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const inputText = (event) => {
+    if (event.key === "Enter" && tarea.trim() !== "") {
+      crearTarea(tarea);
+      setTarea("");
+    }
+  };
+
+  useEffect(() => {
+    traerLista();
+  }, []);
+
+  return (
+    <>
+      <h1 className="big-title">todos</h1>
+      <div className="text-center paper">
+        <input
+          className="ingreso-de-texto"
+          type="text"
+          placeholder="What needs to be done?"
+          onChange={(e) => setTarea(e.target.value)}
+          value={tarea}
+          onKeyDown={inputText}
+        />
+        <ul className="list-unstyled texto-ingresado">
+          {lista.map((item, index) => (
+            <li key={item.id || index}>
+              {item.label}
+              <span onClick={() => eliminarTarea(item.id)}> ❌</span>
+            </li>
+          ))}
+        </ul>
+        <p className="counter">{lista.length} items left</p>
+      </div>
+    </>
+  );
 };
 
 export default Home;
