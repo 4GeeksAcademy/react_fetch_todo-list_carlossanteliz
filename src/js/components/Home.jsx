@@ -6,17 +6,17 @@ const Home = () => {
 
   const API_URL = "https://playground.4geeks.com/todo/";
 
-  // const crearUsuario = () => {
-  //   fetch(API_URL + "users/carlossan", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => console.log(data))
-  //     .catch((err) =>
-  //       console.log("Hubo un problema al crear el usuario:\n", err)
-  //     );
-  // };
+  const crearUsuario = () => {
+    fetch(API_URL + "users/carlossan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) =>
+        console.log("Hubo un problema al crear el usuario:\n", error)
+      );
+  };
 
   const traerLista = () => {
     fetch(API_URL + "users/carlossan")
@@ -24,9 +24,9 @@ const Home = () => {
         if (response.status === 404) crearUsuario();
         return response.json();
       })
-      .then((data) => setLista(data.todos || []))
-      .catch((err) =>
-        console.log("Hubo un problema al obtener la lista:\n", err)
+      .then((data) => setLista(data.todos))
+      .catch((error) =>
+        console.log("Hubo un problema al obtener la lista:\n", error)
       );
   };
 
@@ -38,19 +38,20 @@ const Home = () => {
         body: JSON.stringify({ label: text, is_done: false }),
       });
       if (!response.ok)
-        throw new Error(`Error ${response.status}: No se pudo crear la tarea`);
+        throw new error(`error ${response.status}: No se pudo crear la tarea`);
       await traerLista();
     } catch (error) {
       console.error("Hubo un problema al crear la tarea:", error);
     }
   };
 
+
   const eliminarTarea = async (id) => {
     try {
       const response = await fetch(API_URL + "todos/" + id, {
         method: "DELETE",
       });
-      if (!response.ok) throw new Error("No se pudo eliminar la tarea");
+      if (!response.ok) throw new error("No se pudo eliminar la tarea");
       await traerLista();
     } catch (error) {
       console.error(error);
@@ -58,7 +59,7 @@ const Home = () => {
   };
 
   const inputText = (event) => {
-    if (event.key === "Enter" && tarea.trim() !== "") {
+    if (event.key === "Enter") {
       crearTarea(tarea);
       setTarea("");
     }
