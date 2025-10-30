@@ -82,8 +82,8 @@ const Home = () => {
           onKeyDown={inputText}
         />
         <ul className="list-unstyled texto-ingresado">
-          {lista.map((item, index) => (
-            <li key={item.id || index}>
+          {lista.map((item) => (
+            <li key={item.id}>
               {item.label}
               <span onClick={() => eliminarTarea(item.id)}> ❌</span>
             </li>
