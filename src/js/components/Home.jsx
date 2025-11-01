@@ -30,20 +30,6 @@ const Home = () => {
       );
   };
 
-  // const crearTarea = async (text) => {
-  //   try {
-  //     const response = await fetch(API_URL + "todos/carlossan", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ label: text, is_done: false }),
-  //     });
-  //     if (!response.ok)
-  //       throw new error(`error ${response.status}: No se pudo crear la tarea`);
-  //     await traerLista();
-  //   } catch (error) {
-  //     console.error("Hubo un problema al crear la tarea:", error);
-  //   }
-  // };
 
   const crearTarea = (text) => {
     fetch(API_URL + "todos/carlossan", {
